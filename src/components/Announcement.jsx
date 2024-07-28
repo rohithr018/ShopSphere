@@ -5,7 +5,7 @@ const Container = styled.div`
     background-color:teal;
     color:white;
     display:flex;
-    justify-content:centre;
+    justify-content:center;
     font-size:14px;
     font-weight:500;
 `
