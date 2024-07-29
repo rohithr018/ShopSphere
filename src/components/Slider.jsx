@@ -45,7 +45,7 @@ const Slide = styled.div`
     display:flex;
     align-items:center;
     background-color:#${(props) => props.bg};
-    animation:
+
 `;
 const ImageContainer = styled.div`
     height:100%;
