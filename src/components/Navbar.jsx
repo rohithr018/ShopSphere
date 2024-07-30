@@ -3,14 +3,19 @@ import { Badge } from '@mui/material'
 import React from 'react'
 import { styled } from 'styled-components'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { mobile } from "../responsive"
+
 const Container = styled.div`
     height:60px;
-`
+    ${mobile({ height: "50px" })}
+`;
+
 const Wrapper = styled.div`
     padding:10px 20px;
     display:flex;
     align-items:center;
     justify-content:space-between;
+    ${mobile({ padding: "10px 0px" })}
 `
 const Left = styled.div`
     flex:1;
@@ -21,6 +26,7 @@ const Left = styled.div`
 const Language = styled.span`
     font-size:14px;
     cursor:pointer;
+    ${mobile({ display: "none" })}
 `
 const SearchContainer = styled.span`
     border:0.5px solid lightgray;
@@ -33,17 +39,19 @@ const SearchContainer = styled.span`
 `
 const Input = styled.input`
     border:none;
+    ${mobile({ width: "50px" })}
 `
 
 const Center = styled.div`
     /* width:33.3%; */
     flex:1;
     text-align:center;
-    display:flex;
+    /* display:flex; */
 `
 
 const Logo = styled.h1`
     font-weight:bold;
+    ${mobile({ fontSize: "24px" })}
     
 `
 const Right = styled.div`
@@ -52,14 +60,14 @@ const Right = styled.div`
     display:flex;
     align-items:center;
     justify-content:flex-end;
-
-
+    ${mobile({ justifyContent: "center", flex: "2" })}
 `
 
 const MenuItem = styled.div`
     font-size:14px;
     cursor:pointer;
     margin-left:25px;
+    ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `
 const Navbar = () => {
     return (
@@ -68,12 +76,12 @@ const Navbar = () => {
                 <Left>
                     <Language>En</Language>
                     <SearchContainer>
-                        <Input />
-                        <Search style={{ color: "black", fontSize: 25 }} />
+                        <Input placeholder="Search" />
+                        <Search style={{ color: "gray", fontSize: 16 }} />
                     </SearchContainer>
                 </Left>
                 <Center>
-                    <Logo>Logo</Logo>
+                    <Logo>LOGO</Logo>
                 </Center>
                 <Right>
                     <MenuItem>Register</MenuItem>

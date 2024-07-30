@@ -6,15 +6,12 @@ const Container = styled.div`
     color:white;
     display:flex;
     justify-content:center;
-    font-size:14px;
+    font-size:20px;
     font-weight:500;
 `
 const Announcement = () => {
     return (
-        <Container>
-            ENTER TEXT
-            Announcement.js
-        </Container>
+        <Container>Announcement</Container>
     );
 };
 
