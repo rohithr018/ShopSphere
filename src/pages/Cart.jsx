@@ -4,7 +4,15 @@ import Announcement from "../components/Announcement"
 import Footer from "../components/Footer"
 import { Add, Remove } from "@mui/icons-material";
 import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom"
+import StripeCheckout from "react-stripe-checkout";
+import { useEffect, useState } from "react";
+import { userRequest } from "../requestMethods";
+//const dotenv = require("dotenv");
 
+//const KEY = process.env.PUBLISHABLE_STRIPE_KEY;
+const KEY = "pk_test_51PjMUo08qkAj1KM3rU9Bsyf39GqkYGTU8UjVyEBm5XEN6Szj7o4b2l1aZmCf2K2GA89DZjkpb87wnhB5mhJBzNiU00lqEHWWAw";
 
 const Container = styled.div``;
 
@@ -155,6 +163,34 @@ const Button = styled.button`
 
 
 const Cart = () => {
+    const cart = useSelector(state => state.cart)
+    const estshipping = 10;
+    const discount = 10;//percent
+    const Total = cart.total + estshipping - (discount / 100) * cart.total //grosstotal
+    const finalTotal = Math.round(Total) //finaltotal
+    const rounding = (Total - finalTotal).toFixed(2)//finaltotal
+
+    const [stripeToken, setStripeToken] = useState(null)
+    const navigate = useNavigate()
+    const onToken = (token) => {
+        setStripeToken(token)
+    }
+    //console.log(stripeToken)
+    console.log("Stripe Publishable Key:", KEY);
+    useEffect(() => {
+        const makeRequest = async () => {
+            try {
+                const res = await userRequest.post("/checkout/payment", {
+                    tokenId: stripeToken.id,
+                    amount: cart.total * 100,
+                });
+                navigate("/success", { data: res.data })
+            } catch (err) {
+
+            }
+        }
+        stripeToken && cart.total > 0 && makeRequest()
+    }, [stripeToken, cart.total, navigate])
     return (
         <Container>
             <Navbar />
@@ -171,65 +207,67 @@ const Cart = () => {
                 </Top>
                 <Bottom>
                     <Info>
-                        <Product>
-                            <ProductDetail>
-                                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A" />
-                                <Details>
-                                    <ProductName><b>Product:</b>Jessie THunder Shoes</ProductName>
-                                    <ProductId><b>ID:</b>ID</ProductId>
-                                    <ProductColor color="black" />
-                                    <ProductSize><b>Size:</b>37.5</ProductSize>
-                                </Details>
-                            </ProductDetail>
-                            <PrizeDetail>
-                                <ProductAmountContainer>
-                                    <Add />
-                                    <ProductAmount>2</ProductAmount>
-                                    <Remove />
-                                </ProductAmountContainer>
-                                <ProductPrice>$20</ProductPrice>
-                            </PrizeDetail>
-                        </Product>
+                        {cart.products.map(product => (
+
+                            <Product key={product.id}>
+                                <ProductDetail>
+                                    <Image src={product.img} />
+                                    <Details>
+                                        <ProductName><b>Product:</b>{product.title}</ProductName>
+                                        <ProductId><b>ID:</b>{product.id}</ProductId>
+                                        <ProductColor color={product.color} />
+                                        <ProductSize><b>Size:</b>{product.color}</ProductSize>
+                                    </Details>
+                                </ProductDetail>
+                                <PrizeDetail>
+                                    <ProductAmountContainer>
+                                        <Add />
+                                        <ProductAmount>{product.quantity}</ProductAmount>
+                                        <Remove />
+                                    </ProductAmountContainer>
+                                    <ProductPrice>{product.price * product.quantity}</ProductPrice>
+                                </PrizeDetail>
+                            </Product>
+                        ))}
                         <Hr />
-                        <Product>
-                            <ProductDetail>
-                                <Image src="https://i.pinimg.com/originals/2d/af/f8/2daff8e0823e51dd752704a47d5b795c.png" />
-                                <Details>
-                                    <ProductName><b>Product:</b>Jessie THunder Shoes</ProductName>
-                                    <ProductId><b>ID:</b>ID</ProductId>
-                                    <ProductColor color="gray" />
-                                    <ProductSize><b>Size:</b>M</ProductSize>
-                                </Details>
-                            </ProductDetail>
-                            <PrizeDetail>
-                                <ProductAmountContainer>
-                                    <Add />
-                                    <ProductAmount>1</ProductAmount>
-                                    <Remove />
-                                </ProductAmountContainer>
-                                <ProductPrice>$30</ProductPrice>
-                            </PrizeDetail>
-                        </Product>
                     </Info>
                     <Summary>
                         <SummaryTitle>OrderSummar</SummaryTitle>
                         <SummaryItem>
                             <SummarItemText>SubTotal</SummarItemText>
-                            <SummarItemPrice>$80</SummarItemPrice>
+                            <SummarItemPrice>${cart.total}</SummarItemPrice>
+                        </SummaryItem>
+                        <SummaryItem>
+                            <SummarItemText>Discount</SummarItemText>
+                            <SummarItemPrice>-{discount}%</SummarItemPrice>
                         </SummaryItem>
                         <SummaryItem>
                             <SummarItemText>EstimatedShipping</SummarItemText>
-                            <SummarItemPrice>$10</SummarItemPrice>
+                            <SummarItemPrice>+${estshipping}</SummarItemPrice>
                         </SummaryItem>
-                        <SummaryItem>
-                            <SummarItemText>ShippingDiscount</SummarItemText>
-                            <SummarItemPrice>$-4</SummarItemPrice>
+                        <SummaryItem >
+                            <SummarItemText>Rounding</SummarItemText>
+                            {rounding > 0
+                                ? <SummarItemPrice>-${rounding}</SummarItemPrice>
+                                : <SummarItemPrice>+${-rounding}</SummarItemPrice>
+                            }
                         </SummaryItem>
                         <SummaryItem type="total">
                             <SummarItemText>Total</SummarItemText>
-                            <SummarItemPrice>$80</SummarItemPrice>
+                            <SummarItemPrice>${finalTotal}</SummarItemPrice>
                         </SummaryItem>
-                        <Button>CHECKOUT NOW</Button>
+                        <StripeCheckout
+                            name="Shop"
+                            image="https://avatars.githubusercontent.com/u/1486366?v=4"
+                            billingAddress
+                            shippingAddress
+                            description={`Total = ${finalTotal}`}
+                            amount={finalTotal * 100} //as stripe works on cents
+                            token={onToken}
+                            stripeKey={KEY}
+                        >
+                            <Button>CHECKOUT NOW</Button>
+                        </StripeCheckout>
                     </Summary>
                 </Bottom>
             </Wrapper>
