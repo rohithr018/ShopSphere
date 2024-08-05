@@ -5,7 +5,7 @@ import { styled } from 'styled-components'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { mobile } from "../responsive"
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     height:60px;
@@ -48,11 +48,27 @@ const Center = styled.div`
     /* width:33.3%; */
     flex:1;
     text-align:center;
+    align-items: center;
+    justify-content: center;
     /* display:flex; */
-`
+`;
+
+const LogoContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    cursor: pointer;
+`;
+
+const LogoImage = styled.img`
+    height: 45px;
+    object-fit: cover;
+    ${mobile({ height: '30px' })}
+`;
 
 const Logo = styled.h1`
     font-weight:bold;
+    cursor:pointer;
     ${mobile({ fontSize: "24px" })}
     
 `
@@ -74,6 +90,10 @@ const MenuItem = styled.div`
 const Navbar = () => {
     const quantity = useSelector(state => state.cart.quantity)
     //console.log(quantity)
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate('/');
+    };
 
     return (
         <Container>
@@ -86,7 +106,10 @@ const Navbar = () => {
                     </SearchContainer>
                 </Left>
                 <Center>
-                    <Logo>LOGO</Logo>
+                    <LogoContainer onClick={handleClick}>
+                        <LogoImage src="/images/icon2.png" alt="ShopSphere Logo" />
+                        <Logo>ShopSphere</Logo>
+                    </LogoContainer>
                 </Center>
                 <Right>
                     <MenuItem>Register</MenuItem>

@@ -33,14 +33,14 @@ const Container = styled.div`
     }
 `;
 
-const Circle = styled.div`
-    width:200px;
-    height:200px;
-    border-radius:50%;
-    background-color:#fff;
-    position:absolute;
+// const Circle = styled.div`
+//     width:200px;
+//     height:200px;
+//     border-radius:50%;
+//     background-color:#fff;
+//     position:absolute;
 
-`;
+// `;
 const Image = styled.img`
     height:75%;
     z-index:2;
@@ -66,12 +66,13 @@ const Icon = styled.div`
 `;
 
 const Product = ({ item }) => {
+    const errorImage = "https://static.vecteezy.com/system/resources/previews/023/904/042/non_2x/red-exclamation-mark-icon-circle-isolated-on-white-background-illustration-vector.jpg"
     const handleImageError = (event) => {
-        event.target.src = "https://img.freepik.com/free-vector/crossing-bones-skull-vector-logo_43623-1281.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722211200&semt=sph";
+        event.target.src = errorImage;
     };
     return (
         <Container>
-            <Circle />
+            {/* <Circle /> */}
             <Image src={item.img} onError={handleImageError} />
             <Info>
                 <Icon>

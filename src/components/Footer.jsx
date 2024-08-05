@@ -1,11 +1,11 @@
 import {
-    Facebook,
+    Email,
+    GitHub,
     Instagram,
+    LinkedIn,
     Mail,
     Phone,
-    Pinterest,
     Room,
-    Twitter
 } from "@mui/icons-material";
 import { styled } from "styled-components"
 import { mobile } from "../responsive"
@@ -22,10 +22,10 @@ const Left = styled.div`
     padding:20px;
 `;
 
-const Logo = styled.div``;
+const Logo = styled.h1``;
 
 
-const Desc = styled.div`
+const Desc = styled.p`
     margin:20px 0px;
 
 `;
@@ -88,21 +88,46 @@ const Footer = () => {
     return (
         <Container>
             <Left>
-                <Logo>DAVE.</Logo>
-                <Desc>Description</Desc>
+                <Logo>Rohith</Logo>
+                <Desc>E-Commerce with MERN stack</Desc>
                 <SocialContainer>
-                    <SocialIcon color="3B5999">
-                        <Facebook />
-                    </SocialIcon>
-                    <SocialIcon color="E4405F">
-                        <Instagram />
-                    </SocialIcon>
-                    <SocialIcon color="55ACEE">
-                        <Twitter />
-                    </SocialIcon>
-                    <SocialIcon color="E60023">
-                        <Pinterest />
-                    </SocialIcon>
+                    <a
+                        href="https://www.linkedin.com/in/rohithr1809/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <SocialIcon color="0000FF">
+                            <LinkedIn />
+                        </SocialIcon>
+                    </a>
+                    <a
+                        href="https://www.instagram.com/__rohith18/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <SocialIcon color="E4405F">
+                            <Instagram />
+                        </SocialIcon>
+                    </a>
+                    <a
+                        href="https://github.com/rohithr018"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <SocialIcon color="000000">
+                            <GitHub />
+                        </SocialIcon>
+                    </a>
+                    <a
+                        href="mailto:rohith018.r@gmail.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+
+                        <SocialIcon color="000000">
+                            <Email />
+                        </SocialIcon>
+                    </a>
                 </SocialContainer>
             </Left>
             <Center>
@@ -124,13 +149,13 @@ const Footer = () => {
             <Right>
                 <Title>Contact</Title>
                 <ContactItem>
-                    <Room style={{ marginRight: "10px" }} />Address
+                    <Room style={{ marginRight: "10px" }} />Bengaluru
                 </ContactItem>
                 <ContactItem>
-                    <Phone style={{ marginRight: "10px" }} />Phone
+                    <Phone style={{ marginRight: "10px" }} />{process.env.MOBILE}
                 </ContactItem>
                 <ContactItem>
-                    <Mail style={{ marginRight: "10px" }} />email
+                    <Mail style={{ marginRight: "10px" }} />{process.env.EMAIL}
                 </ContactItem>
                 <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" />
             </Right>
