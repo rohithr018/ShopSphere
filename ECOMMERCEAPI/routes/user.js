@@ -2,6 +2,54 @@ const { verifyTokenAndAuthorization, verifyTokenAndAdmin } = require("./verifyTo
 const User = require("../models/User");
 const router = require("express").Router();
 const CryptoJS = require("crypto-js");
+const { json } = require("react-router-dom");
+
+router.post("/register", async (req, res) => {
+    const { username, password, email, confirmpassword } = req.body;
+
+    // Check for missing fields
+    if (!username || !password || !email || !confirmpassword) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Check if passwords match
+    if (password !== confirmpassword) {
+        return res.status(400).json({ message: "Passwords do not match!" });
+    }
+
+    try {
+        // Check for existing user
+        const duplicateUser = await User.findOne({ username }).exec();
+        if (duplicateUser) {
+            return res.status(409).json({ message: "Username already taken!" });
+        }
+
+        // Check for existing email
+        const duplicateEmail = await User.findOne({ email }).exec();
+        if (duplicateEmail) {
+            return res.status(409).json({ message: "Email already registered" });
+        }
+
+        // Hash password and create user
+        const hashedPassword = CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString();
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+        });
+
+        // Save user
+        await newUser.save();
+
+        return res.status(201).json({ message: `User ${username} created successfully!` });
+
+    } catch (err) {
+        console.error("Error creating user:", err); // Log the error for debugging
+        return res.status(500).json({ message: "Error creating user", error: err.message });
+    }
+});
+
+
 //update
 router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
     if (req.body.password) {

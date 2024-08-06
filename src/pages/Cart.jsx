@@ -172,11 +172,14 @@ const Cart = () => {
 
     const [stripeToken, setStripeToken] = useState(null)
     const navigate = useNavigate()
+    const handlecontinue = () => {
+        navigate("/")
+    }
     const onToken = (token) => {
         setStripeToken(token)
     }
     //console.log(stripeToken)
-    console.log("Stripe Publishable Key:", KEY);
+    //console.log("Stripe Publishable Key:", KEY);
     useEffect(() => {
         const makeRequest = async () => {
             try {
@@ -198,7 +201,7 @@ const Cart = () => {
             <Wrapper>
                 <Title>BAG</Title>
                 <Top>
-                    <TopButton>CONTINUE SHOPPING</TopButton>
+                    <TopButton onClick={handlecontinue}>CONTINUE SHOPPING</TopButton>
                     <TopTexts>
                         <TopText>Shopping bag(2)</TopText>
                         <TopText>Your Wishlist</TopText>

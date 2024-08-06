@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
             },
             process.env.JWT_SEC,
             {
-                expiresIn: "1d"
+                expiresIn: "1m"
             }
         );
 

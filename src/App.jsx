@@ -23,17 +23,19 @@ const App = () => {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/success" element={<Success />} />
-          {user ? (
-            <>
-              <Route path="/login" element={<Home />} />
-              <Route path="/register" element={<Home />} />
-            </>
-          ) : (
-            <>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-            </>
-          )}
+          {user
+            ? (
+              <>
+                <Route path="/login" element={<Home />} />
+                <Route path="/register" element={<Home />} />
+              </>
+            )
+            : (
+              <>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+              </>
+            )}
         </Routes>
       </Suspense>
     </Router>
