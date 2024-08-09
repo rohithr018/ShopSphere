@@ -9,8 +9,6 @@ import { useNavigate } from "react-router-dom"
 import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
-//const dotenv = require("dotenv");
-
 //const KEY = process.env.PUBLISHABLE_STRIPE_KEY;
 const KEY = "pk_test_51PjMUo08qkAj1KM3rU9Bsyf39GqkYGTU8UjVyEBm5XEN6Szj7o4b2l1aZmCf2K2GA89DZjkpb87wnhB5mhJBzNiU00lqEHWWAw";
 
@@ -37,6 +35,7 @@ const TopButton = styled.button`
     padding:10px;
     font-weight:600;
     cursor:pointer;
+    border-radius: 10px;
     border:${(props) => props.type === "filled" && "none"};
     background-color:${(props) => props.type === "filled" ? "black" : "transparent"};
     color:${(props) => props.type === "filled" && "White"};
@@ -157,14 +156,18 @@ const Button = styled.button`
     width:100%;
     padding:10px;
     background:black;
+    border-radius: 10px;
     color:white;
     font-weight:600;
+    &:hover {
+        background-color: #333131;
+    }
 `;
 
 
 const Cart = () => {
     const cart = useSelector(state => state.cart)
-    const estshipping = 10;
+    const estshipping = cart.total > 499 ? 0 : 10;
     const discount = 10;//percent
     const Total = cart.total + estshipping - (discount / 100) * cart.total //grosstotal
     const finalTotal = Math.round(Total) //finaltotal
@@ -177,8 +180,9 @@ const Cart = () => {
     }
     const onToken = (token) => {
         setStripeToken(token)
+        console.log(stripeToken)
     }
-    //console.log(stripeToken)
+
     //console.log("Stripe Publishable Key:", KEY);
     useEffect(() => {
         const makeRequest = async () => {
@@ -187,13 +191,16 @@ const Cart = () => {
                     tokenId: stripeToken.id,
                     amount: cart.total * 100,
                 });
-                navigate("/success", { data: res.data })
+                navigate("/success", {
+                    stripeData: res.data
+                })
             } catch (err) {
-
+                console.log(err)
             }
         }
         stripeToken && cart.total > 0 && makeRequest()
     }, [stripeToken, cart.total, navigate])
+
     return (
         <Container>
             <Navbar />

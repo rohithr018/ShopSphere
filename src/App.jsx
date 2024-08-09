@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import LoadingSpinner from './components/loadingSpinner';
+import Profile from './pages/Profile';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const ProductList = React.lazy(() => import('./pages/ProductList'));
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/products/:category" element={<ProductList />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/success" element={<Success />} />
           {user
             ? (
