@@ -4,3 +4,4 @@
 /.env
 /images
 admin/node_modules
+admin/public
