@@ -1,3 +1,4 @@
+![ShopSphere](public/images/icon2.png)
 # ShopSphere
 
 ## Description

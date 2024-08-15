@@ -1,10 +1,62 @@
 import { PublishRounded } from "@mui/icons-material"
-import { Link } from "react-router-dom"
+import { useEffect, useMemo, useState } from "react"
+import { useSelector } from "react-redux"
+import { Link, useLocation } from "react-router-dom"
 import Chart from "../../components/chart/Chart"
-import { productData } from "../../dummydata"
+import { userRequest } from "../../requestMethods"
 import "./Product.css"
 
 export default function Product() {
+    const location = useLocation()
+    const productId = location.pathname.split("/")[2]
+
+    const [productStats, setProductStats] = useState([])
+
+    const product = useSelector((state) => state.product.products.find(
+        (product) => product._id === productId)
+    )
+
+    const MONTHS = useMemo(
+        () => [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+        ],
+        []
+    )
+
+    useEffect(() => {
+        const getStats = async () => {
+            try {
+                const res = await userRequest.get("orders/income?pid=" + productId)
+                const list = res.data.sort((a, b) => {
+                    return a._id - b._id
+                })
+                list.map((item) =>
+                    setProductStats((prev) => [
+                        ...prev,
+                        { name: MONTHS[item._id - 1], Sales: item.total },
+                    ])
+                )
+
+            } catch (err) {
+
+            }
+        };
+        getStats();
+
+    }, [productId, MONTHS]);
+
+    //console.log(product)
     return (
         <div className='product'>
             <div className="productTitleCotainer">
@@ -15,33 +67,32 @@ export default function Product() {
             </div>
             <div className="productTop">
                 <div className="productTopLeft">
-                    <Chart data={productData} datakey="Sales" title="Sales Performance" />
+                    <Chart
+                        data={productStats}
+                        datakey="Sales"
+                        title="Sales Performance"
+                    />
                 </div>
                 <div className="productTopRight">
                     <div className="productInfoTop">
 
-                        <img src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MME73?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1632861342000" alt="" className="productInfoImg" />
-                        <span className="productName">Apple Earpods</span>
+                        <img src={product.img} className="productInfoImg" alt="" />
+                        <span className="productName">{product.title}</span>
                     </div>
                     <div className="productInfoBottom">
                         <div className="productInfoItem">
-                            <span className="productInfoKey">id:</span>
+                            <span className="productInfoKey">ID: </span>
+                            <span className="productInfoValue">{product._id}</span>
+                        </div>
+
+                        <div className="productInfoItem">
+                            <span className="productInfoKey">Sales: </span>
                             <span className="productInfoValue">123</span>
                         </div>
 
                         <div className="productInfoItem">
-                            <span className="productInfoKey">Sales</span>
-                            <span className="productInfoValue">123</span>
-                        </div>
-
-                        <div className="productInfoItem">
-                            <span className="productInfoKey">Active:</span>
-                            <span className="productInfoValue">yes</span>
-                        </div>
-
-                        <div className="productInfoItem">
-                            <span className="productInfoKey">In stock:</span>
-                            <span className="productInfoValue">no</span>
+                            <span className="productInfoKey">In stock: </span>
+                            <span className="productInfoValue">{product.inStock}</span>
                         </div>
                     </div>
                 </div>
@@ -50,21 +101,21 @@ export default function Product() {
                 <form className="productForm">
                     <div className="productFormLeft">
                         <label>Product Name</label>
-                        <input type="text" placeholder="Apple Airpod" />
+                        <input type="text" placeholder={product.title} />
+                        <label>Product Description</label>
+                        <input type="text" placeholder={product.desc} />
+                        <label>Product Price</label>
+                        <input type="text" placeholder={product.price} />
+
                         <label >In Stock</label>
                         <select name="inStock" id="inStock">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                        <label >Active</label>
-                        <select name="active" id="active">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
                         </select>
                     </div>
                     <div className="productFormRight">
                         <div className="productUpload">
-                            <img src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MME73?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1632861342000" alt="" className="productUploadImg" />
+                            <img src={product.img} alt="" className="productUploadImg" />
                             <label htmlFor="file">
                                 <PublishRounded />
                             </label>

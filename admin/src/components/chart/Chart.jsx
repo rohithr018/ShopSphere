@@ -8,6 +8,7 @@ import {
     ResponsiveContainer
 } from 'recharts';
 export default function Chart({ title, data, datakey, grid }) {
+    //console.log(datakey)
 
     return (
         <div className="chart">

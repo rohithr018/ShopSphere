@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 //register
 
 router.post("/register", async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, img } = req.body;
 
     const duplicateUser = await User.findOne({ username }).lean().exec()
     const duplicateEmail = await User.findOne({ email }).lean().exec()
@@ -24,6 +24,7 @@ router.post("/register", async (req, res) => {
     const newUser = new User({
         username: username,
         email: email,
+        img: img,
         password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString(),
     });
     try {
@@ -59,7 +60,7 @@ router.post("/login", async (req, res) => {
             },
             process.env.JWT_SEC,
             {
-                expiresIn: "1m"
+                expiresIn: "1d"
             }
         );
 

@@ -5,3 +5,4 @@
 /images
 admin/node_modules
 admin/public
+admin/src/fireBase.js
